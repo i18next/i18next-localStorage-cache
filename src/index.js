@@ -76,5 +76,6 @@ class Cache {
   }
 }
 
+Cache.type = 'cache';
 
 export default Cache;
