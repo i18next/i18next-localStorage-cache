@@ -1,5 +1,5 @@
 {
-  "name": "i18nextLocalStorageCache",
+  "name": "i18next-localstorage-cache",
   "version": "0.0.3",
   "main": "./bin/index.js",
   "dependencies": {},
