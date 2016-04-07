@@ -47,6 +47,22 @@
     return obj;
   }
 
+  function debounce(func, wait, immediate) {
+    var timeout;
+    return function () {
+      var context = this,
+          args = arguments;
+      var later = function later() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  };
+
   var storage = {
     setItem: function setItem(key, value) {
       if (window.localStorage) {
@@ -85,6 +101,7 @@
       this.init(services, options);
 
       this.type = 'cache';
+      this.debouncedStore = debounce(this.store, 10000);
     }
 
     babelHelpers.createClass(Cache, [{
@@ -124,14 +141,20 @@
         }
       }
     }, {
-      key: 'save',
-      value: function save(store) {
+      key: 'store',
+      value: function store(_store) {
         if (window.localStorage) {
-          for (var m in store) {
-            store[m].i18nStamp = new Date().getTime();
-            storage.setItem(this.options.prefix + m, JSON.stringify(store[m]));
+          for (var m in _store) {
+            _store[m].i18nStamp = new Date().getTime();
+            storage.setItem(this.options.prefix + m, JSON.stringify(_store[m]));
           }
         }
+        return;
+      }
+    }, {
+      key: 'save',
+      value: function save(store) {
+        this.debouncedStore(store);
         return;
       }
     }]);

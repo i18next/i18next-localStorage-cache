@@ -35,6 +35,7 @@ class Cache {
     this.init(services, options);
 
     this.type = 'cache';
+    this.debouncedStore = utils.debounce(this.store, 10000);
   }
 
   init(services, options = {}) {
@@ -65,13 +66,18 @@ class Cache {
     }
   }
 
-  save(store) {
+  store(store) {
     if(window.localStorage) {
       for (var m in store) {
         store[m].i18nStamp = new Date().getTime();
         storage.setItem(this.options.prefix + m, JSON.stringify(store[m]));
       }
     }
+    return;
+  }
+
+  save(store) {
+    this.debouncedStore(store);
     return;
   }
 }
