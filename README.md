@@ -20,7 +20,7 @@ Wiring up:
 
 ```js
 import i18next from 'i18next';
-import Cache from 'i18next-localStorage-cache';
+import Cache from 'i18next-localstorage-cache';
 
 i18next
   .use(Cache)
@@ -52,7 +52,7 @@ Options can be passed in:
 
 ```js
 import i18next from 'i18next';
-import Cache from 'i18next-localStorage-cache';
+import Cache from 'i18next-localstorage-cache';
 
 i18next
   .use(Cache)
@@ -64,14 +64,14 @@ i18next
 on construction:
 
 ```js
-  import Cache from 'i18next-localStorage-cache';
+  import Cache from 'i18next-localstorage-cache';
   const cache = new Cache(null, options);
 ```
 
 via calling init:
 
 ```js
-  import Cache from 'i18next-localStorage-cache';
+  import Cache from 'i18next-localstorage-cache';
   const cache = new Cache();
   cache.init(options);
 ```
