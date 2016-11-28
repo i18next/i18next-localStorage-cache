@@ -33,17 +33,15 @@ As with all modules you can either pass the constructor function (class) to the 
 
 ```js
 {
-  return {
-    // turn on or off
-    enabled: false,
+  // turn on or off
+  enabled: false,
 
-    // prefix for stored languages
-    prefix: 'i18next_res_',
+  // prefix for stored languages
+  prefix: 'i18next_res_',
 
-    // expiration
-    expirationTime: 7*24*60*60*1000
-  };
-}
+  // expiration
+  expirationTime: 7*24*60*60*1000
+};
 ```
 
 Options can be passed in:
