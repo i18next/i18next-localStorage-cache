@@ -47,23 +47,23 @@ class Cache {
     let store = {}
       , nowMS = new Date().getTime();
 
-    if(window.localStorage) {
-      let todo = lngs.length;
+    if (!window.localStorage || !lngs.length) return callback(null, null);
 
-      lngs.forEach(lng => {
-        var local = storage.getItem(this.options.prefix + lng);
+    let todo = lngs.length;
 
-        if (local) {
-          local = JSON.parse(local);
-          if (local.i18nStamp && local.i18nStamp + this.options.expirationTime > nowMS) {
-            store[lng] = local;
-          }
+    lngs.forEach(lng => {
+      var local = storage.getItem(this.options.prefix + lng);
+
+      if (local) {
+        local = JSON.parse(local);
+        if (local.i18nStamp && local.i18nStamp + this.options.expirationTime > nowMS) {
+          store[lng] = local;
         }
+      }
 
-        todo--;
-        if (todo === 0) callback(null, store);
-      });
-    }
+      todo--;
+      if (todo === 0) callback(null, store);
+    });
   }
 
   store(store) {
