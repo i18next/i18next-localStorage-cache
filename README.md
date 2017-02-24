@@ -40,9 +40,17 @@ As with all modules you can either pass the constructor function (class) to the 
   prefix: 'i18next_res_',
 
   // expiration
-  expirationTime: 7*24*60*60*1000
+  expirationTime: 7*24*60*60*1000,
+
+  // language versions
+  versions: {}
 };
 ```
+
+- Contrary to cookies behavior, the cache will respect updates to `expirationTime`. If you set 7 days and later update to 10 days, the cache will persist for 10 days
+
+- Passing in a `versions` object (ex.: `versions: { en: 'v1.2', fr: 'v1.1' }`) will give you control over the cache based on translations version. This setting works along `expirationTime`, so a cached translation will still expire even though the version did not change. You can still set `expirationTime` far into the future to avoid this
+
 
 Options can be passed in:
 
