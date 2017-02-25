@@ -1,24 +1,24 @@
 import * as utils from './utils';
 
-let storage = {
-  setItem: function(key, value) {
+const storage = {
+  setItem(key, value) {
     if (window.localStorage) {
       try {
         window.localStorage.setItem(key, value);
       } catch (e) {
-        //f.log('failed to set value for key "' + key + '" to localStorage.');
+        // f.log('failed to set value for key "' + key + '" to localStorage.');
       }
     }
   },
-  getItem: function(key, value) {
+  getItem(key, value) {
     if (window.localStorage) {
       try {
         return window.localStorage.getItem(key, value);
       } catch (e) {
-        //f.log('failed to get value for key "' + key + '" from localStorage.');
-        return undefined;
+        // f.log('failed to get value for key "' + key + '" from localStorage.');
       }
     }
+    return undefined;
   }
 };
 
@@ -26,7 +26,8 @@ function getDefaults() {
   return {
     enabled: false,
     prefix: 'i18next_res_',
-    expirationTime: 7*24*60*60*1000
+    expirationTime: 7 * 24 * 60 * 60 * 1000,
+    versions: {}
   };
 }
 
@@ -44,41 +45,59 @@ class Cache {
   }
 
   load(lngs, callback) {
-    let store = {}
-      , nowMS = new Date().getTime();
+    const store = {};
+    const nowMS = new Date().getTime();
 
-    if (!window.localStorage || !lngs.length) return callback(null, null);
+    if (!window.localStorage || !lngs.length) {
+      return callback(null, null);
+    }
 
     let todo = lngs.length;
 
-    lngs.forEach(lng => {
-      var local = storage.getItem(this.options.prefix + lng);
+    lngs.forEach((lng) => {
+      let local = storage.getItem(this.options.prefix + lng);
 
       if (local) {
         local = JSON.parse(local);
-        if (local.i18nStamp && local.i18nStamp + this.options.expirationTime > nowMS) {
+        if (
+          // expiration field is mandatory, and should not be expired
+          local.i18nStamp && local.i18nStamp + this.options.expirationTime > nowMS &&
+
+          // there should be no language version set, or if it is, it should match the one in translation
+          this.options.versions[lng] === local.i18nVersion
+        ) {
           store[lng] = local;
         }
       }
 
-      todo--;
-      if (todo === 0) callback(null, store);
+      todo -= 1;
+      if (todo === 0) {
+        callback(null, store);
+      }
     });
+    return undefined;
   }
 
-  store(store) {
-    if(window.localStorage) {
-      for (var m in store) {
+  store(storeParam) {
+    const store = storeParam;
+    if (window.localStorage) {
+      for (const m in store) { // eslint-disable-line
+        // timestamp
         store[m].i18nStamp = new Date().getTime();
+
+        // language version (if set)
+        if (this.options.versions[m]) {
+          store[m].i18nVersion = this.options.versions[m];
+        }
+
+        // save
         storage.setItem(this.options.prefix + m, JSON.stringify(store[m]));
       }
     }
-    return;
   }
 
   save(store) {
     this.debouncedStore(store);
-    return;
   }
 }
 

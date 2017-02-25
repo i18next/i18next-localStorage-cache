@@ -47,7 +47,7 @@ var storage = {
       try {
         window.localStorage.setItem(key, value);
       } catch (e) {
-        //f.log('failed to set value for key "' + key + '" to localStorage.');
+        // f.log('failed to set value for key "' + key + '" to localStorage.');
       }
     }
   },
@@ -56,10 +56,10 @@ var storage = {
       try {
         return window.localStorage.getItem(key, value);
       } catch (e) {
-        //f.log('failed to get value for key "' + key + '" from localStorage.');
-        return undefined;
+        // f.log('failed to get value for key "' + key + '" from localStorage.');
       }
     }
+    return undefined;
   }
 };
 
@@ -67,7 +67,8 @@ function getDefaults() {
   return {
     enabled: false,
     prefix: 'i18next_res_',
-    expirationTime: 7 * 24 * 60 * 60 * 1000
+    expirationTime: 7 * 24 * 60 * 60 * 1000,
+    versions: {}
   };
 }
 
@@ -96,10 +97,12 @@ var Cache = function () {
     value: function load(lngs, callback) {
       var _this = this;
 
-      var store = {},
-          nowMS = new Date().getTime();
+      var store = {};
+      var nowMS = new Date().getTime();
 
-      if (!window.localStorage || !lngs.length) return callback(null, null);
+      if (!window.localStorage || !lngs.length) {
+        return callback(null, null);
+      }
 
       var todo = lngs.length;
 
@@ -108,31 +111,47 @@ var Cache = function () {
 
         if (local) {
           local = JSON.parse(local);
-          if (local.i18nStamp && local.i18nStamp + _this.options.expirationTime > nowMS) {
+          if (
+          // expiration field is mandatory, and should not be expired
+          local.i18nStamp && local.i18nStamp + _this.options.expirationTime > nowMS &&
+
+          // there should be no language version set, or if it is, it should match the one in translation
+          _this.options.versions[lng] === local.i18nVersion) {
             store[lng] = local;
           }
         }
 
-        todo--;
-        if (todo === 0) callback(null, store);
+        todo -= 1;
+        if (todo === 0) {
+          callback(null, store);
+        }
       });
+      return undefined;
     }
   }, {
     key: 'store',
-    value: function store(_store) {
+    value: function store(storeParam) {
+      var store = storeParam;
       if (window.localStorage) {
-        for (var m in _store) {
-          _store[m].i18nStamp = new Date().getTime();
-          storage.setItem(this.options.prefix + m, JSON.stringify(_store[m]));
+        for (var m in store) {
+          // eslint-disable-line
+          // timestamp
+          store[m].i18nStamp = new Date().getTime();
+
+          // language version (if set)
+          if (this.options.versions[m]) {
+            store[m].i18nVersion = this.options.versions[m];
+          }
+
+          // save
+          storage.setItem(this.options.prefix + m, JSON.stringify(store[m]));
         }
       }
-      return;
     }
   }, {
     key: 'save',
     value: function save(store) {
       this.debouncedStore(store);
-      return;
     }
   }]);
 
