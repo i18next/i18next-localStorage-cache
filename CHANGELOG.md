@@ -1,4 +1,4 @@
-### 1.0.1
+### 1.1.0
 - added "versions" to list of options, to allow control individually over cached languages
 
 ### 1.0.0
