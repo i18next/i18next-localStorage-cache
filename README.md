@@ -27,11 +27,11 @@ i18next
   .init(i18nextOptions);
 ```
 
-**hint:** the cache plugin is disabled by default. Enable it by setting `enabled: true` in init options for production usage.
-
 As with all modules you can either pass the constructor function (class) to the i18next.use or a concrete instance.
 
 ## Cache Options
+
+**hint:** the cache plugin is disabled by default. Enable it by setting `enabled: true` in init options for production usage.
 
 ```js
 {
