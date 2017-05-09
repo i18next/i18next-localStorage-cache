@@ -117,6 +117,7 @@ var Cache = function () {
 
           // there should be no language version set, or if it is, it should match the one in translation
           _this.options.versions[lng] === local.i18nVersion) {
+            delete local.i18nVersion;
             store[lng] = local;
           }
         }

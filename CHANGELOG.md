@@ -1,3 +1,6 @@
+### 1.1.1
+- fixes i18nVersion is regarded as a namespace [PR7](https://github.com/i18next/i18next-localStorage-cache/pull/7)
+
 ### 1.1.0
 - added "versions" to list of options, to allow control individually over cached languages
 
