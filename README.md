@@ -1,3 +1,6 @@
+Cache will be deprecated in future release and could be replaced with the [chained backend](https://github.com/i18next/i18next-chained-backend). For an example checkout the replacement for [localstorage](https://github.com/i18next/i18next-localstorage-backend).
+
+
 # Introduction
 
 This is a i18next cache layer to be used in the browser. It will load and cache resources from localStorage.
