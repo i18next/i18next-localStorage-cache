@@ -8,6 +8,10 @@
     "i18next",
     "i18next-cache"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/i18next/i18next-localStorage-cache.git"
+  },
   "homepage": "https://github.com/i18next/i18next-localStorage-cache",
   "bugs": "https://github.com/i18next/i18next-localStorage-cache/issues",
   "dependencies": {},
