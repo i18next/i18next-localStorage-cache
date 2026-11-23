@@ -1,4 +1,5 @@
-Cache will be deprecated in future release and could be replaced with the [chained backend](https://github.com/i18next/i18next-chained-backend). For an example checkout the replacement for [localstorage](https://github.com/i18next/i18next-localstorage-backend).
+> [!WARNING]
+> **Deprecated.** i18next dropped cache modules in v11.0.0 (2018): `i18next.use()` ignores this package, so it has no effect with any i18next since. For a localStorage cache, use [i18next-localstorage-backend](https://github.com/i18next/i18next-localstorage-backend) with [i18next-chained-backend](https://github.com/i18next/i18next-chained-backend).
 
 
 # Introduction
